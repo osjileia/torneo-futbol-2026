@@ -90,7 +90,7 @@ function calcTabla(equipos, partidos, categoria, grupo) {
 
 // ─── APP ─────────────────────────────────────────────────────────
 export default function App() {
-  const [tab, setTab] = useState("fixture");
+  const [tab, setTab] = useState("liguilla");
   const [catSel, setCatSel] = useState("alevin");
   const [equipos, setEquipos] = useState(EQUIPOS_INIT);
   const [partidos, setPartidos] = useState(PARTIDOS_INIT);
@@ -126,9 +126,9 @@ export default function App() {
   }
 
   const NAV = [
-    { id: "fixture", icon: "📅", label: "Partidos" },
-    { id: "tabla",   icon: "📊", label: "Tablas" },
-    { id: "bracket", icon: "🏆", label: "Bracket" },
+    { id: "liguilla", icon: "📅", label: "Liguilla" },
+    { id: "clasificacion",   icon: "📊", label: "Clasificación" },
+    { id: "eliminatorias", icon: "🏆", label: "Eliminatorias" },
     { id: "equipos", icon: "👥", label: "Equipos" },
     { id: "admin",   icon: "🔐", label: "Admin" },
   ];
@@ -160,7 +160,7 @@ export default function App() {
       <div style={{ background:`linear-gradient(160deg,${cat.colorBg} 0%,#080810 100%)`,
         padding:"16px 20px 14px", borderBottom:`2px solid ${cat.color}33` }}>
         <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:12 }}>
-          <div style={{ width:58, height:62, borderRadius:10, overflow:"hidden",
+          <div style={{ width:72, height:76, borderRadius:10, overflow:"hidden",
             background:"#fff", border:`2px solid ${cat.color}55`,
             display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
             <img src="/escudo.png" alt="CD Lourdes"
@@ -197,18 +197,18 @@ export default function App() {
 
       {/* VIEWS */}
       <div style={{ padding:16 }}>
-        {tab === "fixture" && <Fixture partidos={partidos} catSel={catSel} cat={cat}
+        {tab === "liguilla" && <Fixture partidos={partidos} catSel={catSel} cat={cat}
           nombreEq={nombreEq} adminOk={adminOk} onEdit={abrirEdit} grupoSel={grupoSel} setGrupoSel={setGrupoSel} />}
-        {tab === "tabla" && <Tablas equipos={equipos} partidos={partidos} catSel={catSel}
+        {tab === "clasificacion" && <Tablas equipos={equipos} partidos={partidos} catSel={catSel}
           cat={cat} grupoSel={grupoSel} setGrupoSel={setGrupoSel} />}
-        {tab === "bracket" && <Bracket equipos={equipos} partidos={partidos} catSel={catSel} cat={cat} />}
+        {tab === "eliminatorias" && <Bracket equipos={equipos} partidos={partidos} catSel={catSel} cat={cat} />}
         {tab === "equipos" && <Equipos equipos={equipos} partidos={partidos} catSel={catSel}
           cat={cat} equipoSel={equipoSel} setEquipoSel={setEquipoSel} nombreEq={nombreEq} />}
         {tab === "admin" && <Admin adminOk={adminOk} adminPass={adminPass} setAdminPass={setAdminPass}
           setAdminOk={setAdminOk} equipos={equipos} partidos={partidos} nombreEq={nombreEq}
           renombrar={renombrar} nombreTorneo={nombreTorneo} setNombreTorneo={setNombreTorneo}
           adminView={adminView} setAdminView={setAdminView} catSel={catSel} cat={cat}
-          onEdit={p => { abrirEdit(p); setTab("fixture"); }} />}
+          onEdit={p => { abrirEdit(p); setTab("liguilla"); }} />}
       </div>
 
       {/* MODAL RESULTADO */}
@@ -276,7 +276,7 @@ function Fixture({ partidos, catSel, cat, nombreEq, adminOk, onEdit, grupoSel, s
   const ps = partidos.filter(p => p.categoria === catSel && p.grupo === grupoSel);
   return (
     <div>
-      <div style={{ fontSize:22, fontWeight:900, letterSpacing:2, marginBottom:14 }}>📅 FIXTURE</div>
+      <div style={{ fontSize:22, fontWeight:900, letterSpacing:2, marginBottom:14 }}>📅 LIGUILLA</div>
       <div style={{ display:"flex", gap:8, marginBottom:14 }}>
         {GRUPOS_LETRAS.map(g => (
           <button key={g} className={`gtab ${grupoSel === g ? "on" : ""}`}
@@ -332,7 +332,7 @@ function Tablas({ equipos, partidos, catSel, cat, grupoSel, setGrupoSel }) {
   const tabla = calcTabla(equipos, partidos, catSel, grupoSel);
   return (
     <div>
-      <div style={{ fontSize:22, fontWeight:900, letterSpacing:2, marginBottom:14 }}>📊 TABLAS</div>
+      <div style={{ fontSize:22, fontWeight:900, letterSpacing:2, marginBottom:14 }}>📊 CLASIFICACIÓN</div>
       <div style={{ display:"flex", gap:8, marginBottom:14 }}>
         {GRUPOS_LETRAS.map(g => (
           <button key={g} className={`gtab ${grupoSel === g ? "on" : ""}`}
@@ -389,7 +389,7 @@ function Bracket({ equipos, partidos, catSel, cat }) {
   });
   return (
     <div>
-      <div style={{ fontSize:22, fontWeight:900, letterSpacing:2, marginBottom:6 }}>🏆 BRACKET</div>
+      <div style={{ fontSize:22, fontWeight:900, letterSpacing:2, marginBottom:6 }}>🏆 ELIMINATORIAS</div>
       <div style={{ fontSize:12, color:"#555", marginBottom:16 }}>
         Los 2 mejores de cada grupo clasifican · 8 equipos
       </div>
