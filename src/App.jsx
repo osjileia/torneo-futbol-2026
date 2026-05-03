@@ -164,7 +164,7 @@ export default function App() {
             background:"#fff", border:`2px solid ${cat.color}55`,
             display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
             <img src="/escudo.png" alt="CD Lourdes"
-              style={{ width:"100%", height:"100%", objectFit:"contain", padding:2 }} />
+              style={{ width:"100%", height:"100%", objectFit:"cover" }} />
           </div>
           <div style={{ flex:1 }}>
             <div style={{ fontSize:9, letterSpacing:3, color:cat.color, fontWeight:800, marginBottom:3, textTransform:"uppercase" }}>
@@ -174,7 +174,7 @@ export default function App() {
               {nombreTorneo}
             </div>
             <div style={{ fontSize:11, color:"#555", marginTop:3, fontWeight:600 }}>
-              Junio 2026 · Pamplona
+              Junio 2026 · Tudela
             </div>
           </div>
         </div>
