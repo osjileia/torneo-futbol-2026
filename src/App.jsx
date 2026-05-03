@@ -1,11 +1,18 @@
 import { useState } from "react";
 
 // ─── ESTRUCTURA DEL TORNEO ───────────────────────────────────────
+// 🎨 COLORES: verde/blanco/rojo — CD Lourdes
 const CATEGORIAS = [
-  { id: "alevin",   label: "Alevín",   emoji: "🟢", tipo: "Fútbol 8",  color: "#16a34a", colorBg: "#052e16" },
-  { id: "infantil", label: "Infantil", emoji: "🔵", tipo: "Fútbol 11", color: "#2563eb", colorBg: "#0c1a3a" },
+  { id: "alevin",   label: "Alevín",   emoji: "🟢", tipo: "Fútbol 8",  color: "#16a34a", colorBg: "#071a08" },
+  { id: "infantil", label: "Infantil", emoji: "⚪", tipo: "Fútbol 11", color: "#e5e7eb", colorBg: "#111118" },
   { id: "juvenil",  label: "Juvenil",  emoji: "🔴", tipo: "Fútbol 11", color: "#dc2626", colorBg: "#2d0a0a" },
 ];
+
+// 🏆 TÍTULO DEL TORNEO
+const TITULO_TORNEO = "IV Torneo Femenino CD Lourdes";
+
+// 🔐 CONTRASEÑA ADMIN (cámbiala por una segura)
+const ADMIN_PASSWORD = "admin123";
 
 const GRUPOS_LETRAS = ["A", "B", "C", "D"];
 
@@ -91,7 +98,7 @@ export default function App() {
   const [adminPass, setAdminPass] = useState("");
   const [editPartido, setEditPartido] = useState(null);
   const [editScore, setEditScore] = useState({ local: "", visitante: "" });
-  const [nombreTorneo, setNombreTorneo] = useState("TORNEO FÚTBOL 2026");
+  const [nombreTorneo, setNombreTorneo] = useState(TITULO_TORNEO);
   const [equipoSel, setEquipoSel] = useState(null);
   const [adminView, setAdminView] = useState("resultados");
   const [grupoSel, setGrupoSel] = useState("A");
@@ -119,7 +126,7 @@ export default function App() {
   }
 
   const NAV = [
-    { id: "fixture", icon: "📅", label: "Fixture" },
+    { id: "fixture", icon: "📅", label: "Partidos" },
     { id: "tabla",   icon: "📊", label: "Tablas" },
     { id: "bracket", icon: "🏆", label: "Bracket" },
     { id: "equipos", icon: "👥", label: "Equipos" },
@@ -128,10 +135,10 @@ export default function App() {
 
   return (
     <div style={{ minHeight:"100vh", background:"#080810", color:"#f0f0f5",
-      fontFamily:"'Barlow Condensed','Arial Narrow',Arial,sans-serif",
+      fontFamily:"'Nunito','Arial Rounded MT Bold',Arial,sans-serif",
       maxWidth:480, margin:"0 auto", paddingBottom:80 }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
         input{font-family:inherit}
         .btn{border:none;cursor:pointer;border-radius:8px;padding:10px 18px;
@@ -151,15 +158,28 @@ export default function App() {
 
       {/* HEADER */}
       <div style={{ background:`linear-gradient(160deg,${cat.colorBg} 0%,#080810 100%)`,
-        padding:"18px 20px 14px", borderBottom:`2px solid ${cat.color}33` }}>
-        <div style={{ fontSize:10, letterSpacing:4, color:cat.color, fontWeight:700, marginBottom:4 }}>
-          TORNEO DE FÚTBOL
-        </div>
-        <div style={{ fontSize:22, fontWeight:900, letterSpacing:2, textTransform:"uppercase", lineHeight:1 }}>
-          {nombreTorneo}
+        padding:"16px 20px 14px", borderBottom:`2px solid ${cat.color}33` }}>
+        <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:12 }}>
+          <div style={{ width:58, height:62, borderRadius:10, overflow:"hidden",
+            background:"#fff", border:`2px solid ${cat.color}55`,
+            display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+            <img src="/escudo.png" alt="CD Lourdes"
+              style={{ width:"100%", height:"100%", objectFit:"contain", padding:2 }} />
+          </div>
+          <div style={{ flex:1 }}>
+            <div style={{ fontSize:9, letterSpacing:3, color:cat.color, fontWeight:800, marginBottom:3, textTransform:"uppercase" }}>
+              Torneo Femenino
+            </div>
+            <div style={{ fontSize:18, fontWeight:900, lineHeight:1.1, color:"#fff" }}>
+              {nombreTorneo}
+            </div>
+            <div style={{ fontSize:11, color:"#555", marginTop:3, fontWeight:600 }}>
+              Junio 2026 · Pamplona
+            </div>
+          </div>
         </div>
         {/* Selector de categoría */}
-        <div style={{ display:"flex", gap:8, marginTop:14 }}>
+        <div style={{ display:"flex", gap:8, marginTop:4 }}>
           {CATEGORIAS.map(c => (
             <button key={c.id} onClick={() => { setCatSel(c.id); setGrupoSel("A"); }}
               style={{ flex:1, background: catSel === c.id ? c.color : "#10101c",
@@ -517,9 +537,9 @@ function Admin({ adminOk, adminPass, setAdminPass, setAdminOk, equipos, partidos
       </div>
       <input className="field" type="password" placeholder="Contraseña"
         value={adminPass} onChange={e => setAdminPass(e.target.value)}
-        onKeyDown={e => e.key === "Enter" && adminPass === "admin123" && setAdminOk(true)}
+        onKeyDown={e => e.key === "Enter" && adminPass === ADMIN_PASSWORD && setAdminOk(true)}
         style={{ maxWidth:280, textAlign:"center" }} />
-      <button className="btn" onClick={() => adminPass === "admin123" && setAdminOk(true)}
+      <button className="btn" onClick={() => adminPass === ADMIN_PASSWORD && setAdminOk(true)}
         style={{ background:cat.color, color:"#fff", maxWidth:280, width:"100%" }}>
         Ingresar
       </button>
