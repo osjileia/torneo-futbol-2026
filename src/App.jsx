@@ -16,14 +16,75 @@ const ADMIN_PASSWORD = "admin123";
 
 const GRUPOS_LETRAS = ["A", "B", "C", "D"];
 
+// ─── ESCUDO EQUIPO ────────────────────────────────────────────────
+// Muestra el escudo si existe en /public/escudos/ID.png, si no las iniciales
+function EscudoEquipo({ equipo, size = 36 }) {
+  const [error, setError] = useState(false);
+  const iniciales = equipo.nombre
+    .split(" ")
+    .filter(w => w.length > 2)
+    .slice(0, 2)
+    .map(w => w[0].toUpperCase())
+    .join("") || equipo.nombre.slice(0, 2).toUpperCase();
+
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: size * 0.2,
+      overflow: "hidden", flexShrink: 0,
+      background: error ? equipo.color + "22" : "#fff",
+      border: `1.5px solid ${equipo.color}55`,
+      display: "flex", alignItems: "center", justifyContent: "center",
+    }}>
+      {!error ? (
+        <img
+          src={`/escudos/${equipo.id}.png`}
+          alt={equipo.nombre}
+          onError={() => setError(true)}
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
+      ) : (
+        <span style={{
+          fontSize: size * 0.33, fontWeight: 900,
+          color: equipo.color, letterSpacing: -0.5
+        }}>{iniciales}</span>
+      )}
+    </div>
+  );
+}
+
+
+// Equipos reales por categoría — grupos pendientes de asignar (provisional A/B/C/D)
+const EQUIPOS_REALES = {
+  alevin: [
+    "Lourdes A","Lourdes B","Lourdes C","Lagunak",
+    "Oberena","P.Fustiñana","Vasconia","Antiguoko",
+    "Martutene","Ardoi","Amigo","CD Sanse",
+    "CD Lakua","Osasuna","Muskaria","Tolosa"
+  ],
+  infantil: [
+    "Lourdes","Lourdes B","Lagunak","Oberena",
+    "P.Fustiñana","Vasconia","Antiguoko","Martutene",
+    "Leioako","Ardoi","Bilbao Artizarrak","Amigo",
+    "CD Sanse","CD Lakua","Mulier","Osasuna"
+  ],
+  juvenil: [
+    "Lourdes A","Lourdes B","Lagunak","Oberena",
+    "Vasconia","UD Logroñés","Martutene","Leioako",
+    "Goierri Gorri","Amigo","Antiguoko","CD Sanse",
+    "Osasuna","Mutilvera","Oyonesa","Buñuel"
+  ],
+};
+
 function generarEquipos() {
   const equipos = [];
   CATEGORIAS.forEach(cat => {
-    GRUPOS_LETRAS.forEach(g => {
-      for (let i = 1; i <= 4; i++) {
+    const nombres = EQUIPOS_REALES[cat.id];
+    GRUPOS_LETRAS.forEach((g, gi) => {
+      for (let i = 0; i < 4; i++) {
+        const idx = gi * 4 + i;
         equipos.push({
-          id: `${cat.id}-${g}${i}`,
-          nombre: `Equipo ${g}${i}`,
+          id: `${cat.id}-${g}${i + 1}`,
+          nombre: nombres[idx] || `Equipo ${g}${i + 1}`,
           categoria: cat.id,
           grupo: g,
           color: cat.color,
@@ -460,7 +521,7 @@ function Equipos({ equipos, partidos, catSel, cat, equipoSel, setEquipoSel, nomb
         <div style={{ background:`linear-gradient(135deg,${cat.colorBg},#080810)`,
           border:`2px solid ${cat.color}44`, borderRadius:16,
           padding:24, marginBottom:16, textAlign:"center" }}>
-          <div style={{ fontSize:48, marginBottom:8 }}>⚽</div>
+          <EscudoEquipo equipo={eq} size={72} />
           <div style={{ fontSize:24, fontWeight:900, letterSpacing:2 }}>{eq.nombre}</div>
           <div style={{ fontSize:12, color:"#666", marginTop:4 }}>
             Grupo {eq.grupo} · {CATEGORIAS.find(c=>c.id===catSel)?.label}
@@ -504,7 +565,7 @@ function Equipos({ equipos, partidos, catSel, cat, equipoSel, setEquipoSel, nomb
         <div key={eq.id} className="card" onClick={() => setEquipoSel(eq.id)}
           style={{ cursor:"pointer", borderLeft:`4px solid ${cat.color}`, transition:"all .15s" }}>
           <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-            <div style={{ fontSize:28 }}>⚽</div>
+            <EscudoEquipo equipo={eq} size={44} />
             <div style={{ flex:1 }}>
               <div style={{ fontWeight:700, fontSize:15 }}>{eq.nombre}</div>
               <div style={{ fontSize:11, color:"#555", marginTop:2 }}>
