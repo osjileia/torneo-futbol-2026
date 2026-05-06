@@ -16,10 +16,41 @@ const ADMIN_PASSWORD = "admin123";
 
 const GRUPOS_LETRAS = ["A", "B", "C", "D"];
 
+
+// 🎨 Mapa de escudos por nombre de equipo
+const ESCUDO_MAP = {
+  "Lourdes A":           "lourdes",
+  "Lourdes B":           "lourdes",
+  "Lourdes C":           "lourdes",
+  "Lourdes":             "lourdes",
+  "Lagunak":             "lagunak",
+  "Oberena":             "oberena",
+  "Vasconia":            "vasconia",
+  "Antiguoko":           "antiguoko",
+  "Martutene":           "martutene",
+  "Ardoi":               "ardoi",
+  "Amigo":               "amigo",
+  "Muskaria":            "muskaria",
+  "Leioako":             "leioako",
+  "Mutilvera":           "mutilvera",
+  "Oyonesa":             "oyonesa",
+  "Buñuel":              "bunuel",
+  "Goierri Gorri":       "goierrigorri",
+  "Mulier":              "mulier",
+};
+
+function getEscudoUrl(nombre) {
+  const key = Object.keys(ESCUDO_MAP).find(k =>
+    nombre.toLowerCase().includes(k.toLowerCase())
+  );
+  return key ? `/escudos/${ESCUDO_MAP[key]}.png` : null;
+}
+
 // ─── ESCUDO EQUIPO ────────────────────────────────────────────────
 // Muestra el escudo si existe en /public/escudos/ID.png, si no las iniciales
 function EscudoEquipo({ equipo, size = 36 }) {
   const [error, setError] = useState(false);
+  const escudoUrl = getEscudoUrl(equipo.nombre);
   const iniciales = equipo.nombre
     .split(" ")
     .filter(w => w.length > 2)
@@ -31,16 +62,16 @@ function EscudoEquipo({ equipo, size = 36 }) {
     <div style={{
       width: size, height: size, borderRadius: size * 0.2,
       overflow: "hidden", flexShrink: 0,
-      background: error ? equipo.color + "22" : "#fff",
+      background: (!escudoUrl || error) ? equipo.color + "22" : "#fff",
       border: `1.5px solid ${equipo.color}55`,
       display: "flex", alignItems: "center", justifyContent: "center",
     }}>
-      {!error ? (
+      {escudoUrl && !error ? (
         <img
-          src={`/escudos/${equipo.id}.png`}
+          src={escudoUrl}
           alt={equipo.nombre}
           onError={() => setError(true)}
-          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          style={{ width: "100%", height: "100%", objectFit: "contain", padding: 2 }}
         />
       ) : (
         <span style={{
